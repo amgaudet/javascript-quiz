@@ -2,6 +2,7 @@ var timerEl = document.querySelector("#timer");
 var questionEl = document.querySelector("#question-title");
 var answerEl = document.querySelector("#answers");
 var secondsLeft = 60;
+var gameOn = false;
 
 var questions = ["q1", "q2", "q3", "q4"];
 var answers = [["a1a", "a1b", "a1c"],["a2a", "a2b", "a2c"],["a3a", "a3b", "a3c"],["a4a", "a4b", "a4c"],];
@@ -10,6 +11,7 @@ var answers = [["a1a", "a1b", "a1c"],["a2a", "a2b", "a2c"],["a3a", "a3b", "a3c"]
 function setStarterScreen(){
     questionEl.textContent = "Welcome to the Javascript quiz. Select the correct answer to each question. Wrong answers subrats 10 seconds from the timer. You've lost when the time is up";
     answerEl.textContent = "Start Quiz";
+    
 }
 
 function setTimer(){
@@ -24,6 +26,15 @@ function setTimer(){
     }, 1000);
 }
 
+
+function gameOver(){
+    //check if time left on the clock
+    //display time left as score
+    //Enter name/initials for high score -> local storage
+    //link to high scores
+}
+
+//populate question/answers
 function gameStart(){
     answerEl.textContent = "";
     //random question selector
@@ -40,12 +51,23 @@ function gameStart(){
         answerEl.appendChild(option);
 
     }
+
+    //removes selected question/answer from arrays
+    questions.splice(randomSelector,1);
+    answers.splice(randomSelector,1);
+
 }
 
 answerEl.addEventListener("click", function(){
-    setTimer();
-    gameStart();
+    if (!gameOn){
+        gameOn = true;
+        setTimer();
+        gameStart();
+    } else {
+        gameStart();
+    }
 });
+
 
 function init (){
     setStarterScreen();
