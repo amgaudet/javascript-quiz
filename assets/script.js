@@ -24,17 +24,27 @@ function setTimer(){
     }, 1000);
 }
 
-// function gameStart(){
-//     //random question selector
-//     randomQuestion = Math.floor(Math.random(questions.length))
-//     //update question-title with question
-//     questionEl.textContent = 
-//     //populate possible answers
-// }
+function gameStart(){
+    answerEl.textContent = "";
+    //random question selector
+    randomSelector = Math.floor(Math.random() * questions.length);
+    //update question-title with question
+    questionEl.textContent = questions[randomSelector];
+    var answerChoices = answers[randomSelector];
+    //populate possible answers
+    for (var i = 0; i < 3; i++){
+        //append new list item
+        var option = document.createElement("li");
+        //apply answer content
+        option.textContent = answerChoices[i];
+        answerEl.appendChild(option);
+
+    }
+}
 
 answerEl.addEventListener("click", function(){
     setTimer();
-    //gameStart();
+    gameStart();
 });
 
 function init (){
