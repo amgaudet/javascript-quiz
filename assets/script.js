@@ -1,8 +1,9 @@
 var timerEl = document.querySelector("#timer");
 var questionEl = document.querySelector("#question-title");
 var answerEl = document.querySelector("#answers");
+var scoresEL = document.querySelector("#scores");
+var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
 var secondsLeft = 60;
-var gameOn = false;
 var questionCounter = 0;
 
 var questions = {
@@ -40,51 +41,33 @@ function setTimer() {
 
 //form built in HTML switch vars
 function gameOver() {
-    answerEl.setAttribute("display", "none");
+    answerEl.textContent = "";
     var score = secondsLeft;
-    var submission = document.createElement("form");
-    var name = document.createElement("textarea");
-    var submit = document.createElement("button");
-
-    submit.setAttribute("class", "submitter");
     var prompt = document.createElement("p");
+    var name = document.createElement("input");
+    name.setAttribute("type", "text");
+    var submit = document.createElement("button");
+    submit.setAttribute("class", "submitter");
 
     questionEl.textContent = "Your score is: " + score;
-    questionEl.appendChild(submission);
-    submission.appendChild(prompt);
-    submission.appendChild(name);
-    submission.appendChild(submit);
+ 
+    scoresEL.appendChild(prompt);
+    scoresEL.appendChild(name);
+    scoresEL.appendChild(submit);
     prompt.textContent = "Enter Initials: ";
     submit.textContent = "Submit!";
 
-    questionEl.addEventListener("click", function () {
+    scoresEL.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var initials = name.value;
+        var entry = { initials: initials, score: score };      
+        highScores = highScores.concat(entry);
+        localStorage.setItem("highScores", JSON.stringify(highScores.concat(entry)));
+
 
     })
 
 }
-
-
-// function gameStart(){
-
-//     answerEl.textContent = "";
-//     randomSelector = Math.floor(Math.random() * questions.question.length);
-//     if (questions.question.length === 0){
-//         gameOver();
-//     } else {
-//         questionEl.textContent = questions.question[randomSelector];
-//         var answerChoices = questions.answers[randomSelector];
-
-//         for (var i = 0; i < 4; i++){
-//             var option = document.createElement("button");
-
-//             option.setAttribute("class", "answer-choice");
-//             option.textContent = answerChoices[i];
-//             answerEl.appendChild(option);
-//         }       
-//         questions.question.splice(randomSelector,1);
-//         questions.answers.splice(randomSelector,1);
-//     }
-// }
 
 function runGame() {
     questionEl.textContent = questions.question[questionCounter];
