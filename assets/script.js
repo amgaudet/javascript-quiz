@@ -3,7 +3,9 @@ var questionEl = document.querySelector("#question-title");
 var answerEl = document.querySelector("#answers");
 var scoresEL = document.querySelector("#scores");
 var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
-var secondsLeft = 60;
+var scoreBoardEl = document.querySelector("#scoreboard");
+var topScores = document.querySelector("#scores");
+var secondsLeft = 10;
 var questionCounter = 0;
 
 var questions = {
@@ -20,19 +22,12 @@ function setStarterScreen() {
 
 }
 
-questionEl.addEventListener("click", function (event) {
-    if (event.target.matches("button")) {
-        runGame();
-        setTimer();
-    }
-})
-
 function setTimer() {
     var timerInterval = setInterval(function () {
         secondsLeft--;
         timerEl.textContent = secondsLeft;
 
-        if (secondsLeft <= 0 && (questionCounter < 6)) {
+        if (secondsLeft <= 0 || (questionCounter >= 6)) {
             clearInterval(timerInterval);
             gameOver();
         }
@@ -41,8 +36,12 @@ function setTimer() {
 
 //form built in HTML switch vars
 function gameOver() {
+    timerEl.textContent = "";
     answerEl.textContent = "";
     var score = secondsLeft;
+    if (score < 0){
+        score = 0;
+    }
     var prompt = document.createElement("p");
     var name = document.createElement("input");
     name.setAttribute("type", "text");
@@ -50,22 +49,24 @@ function gameOver() {
     submit.setAttribute("class", "submitter");
 
     questionEl.textContent = "Your score is: " + score;
- 
+
     scoresEL.appendChild(prompt);
     scoresEL.appendChild(name);
     scoresEL.appendChild(submit);
     prompt.textContent = "Enter Initials: ";
     submit.textContent = "Submit!";
 
+    
     scoresEL.addEventListener("submit", function (event) {
         event.preventDefault();
         var initials = name.value;
-        var entry = { initials: initials, score: score };      
+        var entry = { initials: initials, score: score };
         highScores = highScores.concat(entry);
         localStorage.setItem("highScores", JSON.stringify(highScores.concat(entry)));
 
 
     })
+
 
 }
 
@@ -84,30 +85,53 @@ function runGame() {
     }
 }
 
+if (questionEl) {
+    answerEl.addEventListener("click", function (event) {
+        var clickTarget = event.target;
+        var state = clickTarget.getAttribute("data-index");
 
-answerEl.addEventListener("click", function (event) {
-    var clickTarget = event.target;
-    var state = clickTarget.getAttribute("data-index");
-
-    if (clickTarget.matches("button")) {
-        questionCounter++;
-        //check if right answer
-        if (questionCounter < questions.question.length) {
-            if (state == 0) {
-                runGame();
-            } else {
-                secondsLeft -= 10;
-                runGame();
+        if (clickTarget.matches("button")) {
+            questionCounter++;
+            //check if right answer
+            if (questionCounter < questions.question.length) {
+                if (state == 0) {
+                    runGame();
+                } else {
+                    secondsLeft -= 10;
+                    runGame();
+                }
             }
-        } else {
-            gameOver();
         }
+    });
+
+    questionEl.addEventListener("click", function (event) {
+        if (event.target.matches("button")) {
+            runGame();
+            setTimer();
+        }
+    })
+}
+
+function listScores() {
+    scoreBoardEl.textContent = "High Scores:"
+    var sortedScore = highScores.sort(function(a, b) {
+        return a.score > b.score;
+    });
+    for (var item of sortedScore) {
+        var liEl = document.createElement("li");
+        liEl.textContent = item.initials + ": " + item.score;
+        topScores.appendChild(liEl);
     }
-});
+
+}
 
 
 function init() {
-    setStarterScreen();
+    if (questionEl){
+        setStarterScreen();
+    } else {
+        listScores();
+    }
 }
 
 init();
