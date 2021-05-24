@@ -1,5 +1,12 @@
 * {
     box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(28, 149, 165);
+    
+}
+
+body {
+    background-color: rgba(0, 0, 0, 0.877);
 }
 
 header {
@@ -7,7 +14,14 @@ header {
     padding: 16px 4px;
     flex-direction: row;
     justify-content: space-between;
+    
+}
 
+#timer {
+    font-size: 32px;
+    position: absolute;
+    top: 80px;
+    right: 80px;
 }
 
 main {
@@ -18,17 +32,67 @@ main {
 
 }
 
+.main-window {
+    display: flex;
+    max-width: 75%;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.712);
+}
+
+h1 {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    align-items: center;
+}
+
 section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 50%;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+input {
+    margin: 16px;
+    max-height: 24px;
+    font-size: 16px;
+}
+
+.submitter {
+    flex: 0 0 100%;
+}
+
+
+
+button {
+    padding: 16px;
+    margin: 20px;
+    background-color: rgb(123, 19, 133);
+    color: rgb(100, 241, 19);
+}
+
+h1 {
+    font-size: 32px;
+}
+
+ol {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-button {
-    padding: 16px;
+li {
     margin: 8px;
-}
+    font-size: 16px;
 
-h1 {
-    font-size: 32px;
 }

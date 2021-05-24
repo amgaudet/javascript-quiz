@@ -5,7 +5,7 @@ var scoresEL = document.querySelector("#scores");
 var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
 var scoreBoardEl = document.querySelector("#scoreboard");
 var topScores = document.querySelector("#scores");
-var secondsLeft = 10;
+var secondsLeft = 60;
 var questionCounter = 0;
 
 var questions = {
@@ -17,7 +17,7 @@ function setStarterScreen() {
     var start = document.createElement("button");
     start.textContent = "Start Quiz";
     start.setAttribute("class", "starter");
-    questionEl.textContent = "Welcome to the Javascript quiz. Select the correct answer to each question. Wrong answers subtracts 10 seconds from the timer. You've lost when the time is up";
+    questionEl.textContent = "Welcome to the Javascript quiz. Select the correct answer to each question. Wrong answers subtracts 10 seconds from the timer. Good luck!";
     questionEl.appendChild(start);
 
 }
@@ -34,12 +34,11 @@ function setTimer() {
     }, 1000);
 }
 
-//form built in HTML switch vars
 function gameOver() {
     timerEl.textContent = "";
     answerEl.textContent = "";
     var score = secondsLeft;
-    if (score < 0){
+    if (score < 0) {
         score = 0;
     }
     var prompt = document.createElement("p");
@@ -56,13 +55,14 @@ function gameOver() {
     prompt.textContent = "Enter Initials: ";
     submit.textContent = "Submit!";
 
-    
+
     scoresEL.addEventListener("submit", function (event) {
         event.preventDefault();
         var initials = name.value;
         var entry = { initials: initials, score: score };
         highScores = highScores.concat(entry);
         localStorage.setItem("highScores", JSON.stringify(highScores.concat(entry)));
+        name.value = "";
 
 
     })
@@ -92,7 +92,6 @@ if (questionEl) {
 
         if (clickTarget.matches("button")) {
             questionCounter++;
-            //check if right answer
             if (questionCounter < questions.question.length) {
                 if (state == 0) {
                     runGame();
@@ -114,7 +113,7 @@ if (questionEl) {
 
 function listScores() {
     scoreBoardEl.textContent = "High Scores:"
-    var sortedScore = highScores.sort(function(a, b) {
+    var sortedScore = highScores.sort(function (a, b) {
         return a.score > b.score;
     });
     for (var item of sortedScore) {
@@ -127,7 +126,7 @@ function listScores() {
 
 
 function init() {
-    if (questionEl){
+    if (questionEl) {
         setStarterScreen();
     } else {
         listScores();
